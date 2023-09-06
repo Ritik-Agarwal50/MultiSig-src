@@ -3,13 +3,13 @@
 "use client";
 import { isAddress } from "ethers/lib/utils";
 import { useRouter } from "next/navigation";
-const [loading, setLoading] = useState(false);
-const router = useRouter();
 import { useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import Icon from "@/components/icon";
 
 export default function CreateSCW() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [signers, setSigners] = useState<string[]>([]);
   const { address } = useAccount();
   const lastInput = useRef<HTMLInputElement | null>(null);

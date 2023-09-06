@@ -27,7 +27,7 @@ model Transaction {
   WalletId Int
   wallet Wallet @relation(fields: [WalletId],references: [id])
 
-  txhash String?
+  txHash String?
 
   userOp Json
   signatures TransactionSignature[]
