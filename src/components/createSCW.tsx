@@ -36,7 +36,7 @@ export default function CreateSCW() {
     newSigners.splice(index, 1);
     setSigners(newSigners);
   }
-  return null;
+  
   const onCreateSCW = async () => {
     try {
       setLoading(true);
@@ -51,7 +51,7 @@ export default function CreateSCW() {
         headers: {
           "Content-Type": "application/json",
         },
-      });
+      }); 
       const data = await response.json();
       if (data.error) {
         throw new Error(data.error);
@@ -61,7 +61,10 @@ export default function CreateSCW() {
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
-        window.alert(error.message);
+        window.alert(JSON.stringify(error, null, 2))
+        console.log(JSON.stringify(error, null, 2))
+        //window.alert(error.message);
+        //window.alert("fails");
       }
     } finally {
       setLoading(false);
