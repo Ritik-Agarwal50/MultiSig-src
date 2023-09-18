@@ -3,7 +3,7 @@
 // Import necessary modules from ethers and userop
 import { defaultAbiCoder, keccak256 } from "ethers/lib/utils";
 import { Constants, IUserOperation } from "userop";
-import { goerli } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 
 // Define an asynchronous function to get the user operation hash
 export default async function getUserOpHash(userOp: IUserOperation) {
@@ -38,7 +38,7 @@ export default async function getUserOpHash(userOp: IUserOperation) {
   // Encode the keccak256 hash with the address of the entry point contract and chainID
   const encodedUserOpWithChainIdAndEntryPoint = defaultAbiCoder.encode(
     ["bytes32", "address", "uint256"],
-    [keccak256(encodedUserOp), Constants.ERC4337.EntryPoint, goerli.id]
+    [keccak256(encodedUserOp), Constants.ERC4337.EntryPoint, sepolia.id]
   );
 
   // Return the keccak256 hash of the whole thing encoded

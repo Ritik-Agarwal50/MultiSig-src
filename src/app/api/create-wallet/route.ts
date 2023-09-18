@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const response = await prisma.wallet.create({
       data: {
         salt: salt,
-        signer: signers.map((s) => s.toLowerCase()),
+        signers: signers.map((s) => s.toLowerCase()),
         isDeployed: false,
         address: walletAddress,
       },
