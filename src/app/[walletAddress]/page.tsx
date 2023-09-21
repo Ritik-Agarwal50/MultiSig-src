@@ -10,9 +10,6 @@ import getUserOpHash from "@/utils/getUserOpHash";
 
 // State Variables and Hooks
 // Inside the WalletPage component
-const { address: userAddress } = useAccount();
-const { data: walletClient } = useWalletClient();
-const [loading, setLoading] = useState(false);
 
 // Define the WalletPage component
 export default function WalletPage({
@@ -21,6 +18,9 @@ export default function WalletPage({
   params: { walletAddress: string };
 }) {
   // Define state variables
+  const { address: userAddress } = useAccount();
+  const { data: walletClient } = useWalletClient();
+  const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState<number>(0);
   const [toAddress, setToAddress] = useState("");
 

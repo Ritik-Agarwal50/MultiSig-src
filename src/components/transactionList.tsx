@@ -12,9 +12,6 @@ import Icon from "./icon";
 import { useIsMounted } from "@/hooks/useIsMounted";
 
 // State and Hooks
-const [loading, setLoading] = useState(false);
-
-const { data: walletClient } = useWalletClient();
 
 interface TransactionListProps {
   address: string;
@@ -25,7 +22,11 @@ export default function TransactionsList({
   address,
   walletAddress,
 }: TransactionListProps) {
+  const [loading, setLoading] = useState(false);
+
+  const { data: walletClient } = useWalletClient();
   const [walletTxns, setWalletTxns] = useState<TransactionWithSignatures[]>([]);
+  //const isMounted = useIsMounted();
 
   const fetchTransactions = async () => {
     try {
@@ -60,11 +61,11 @@ export default function TransactionsList({
         message: { raw: userOpHash as `0x${string}` },
       });
 
-      // Send a POST request to the create-signature endpoint with the signer's address, signature, and transaction ID
+      // Send a POST request to the create-signature endpoint with the signers's address, signature, and transaction ID
       const response = await fetch("/api/create-signature", {
         method: "POST",
         body: JSON.stringify({
-          signerAddress: address,
+          signersAddress: address,
           signature,
           transactionId: transaction.id,
         }),
@@ -108,7 +109,7 @@ export default function TransactionsList({
       const orderedSignatures: string[] = [];
 
       // Order the signatures based on the order of the signers
-      transaction.wallet.signer.forEach((signer) => {
+      transaction.wallet.signers.forEach((signer) => {
         transaction.signatures.forEach((signature) => {
           if (signature.signerAddress === signer) {
             orderedSignatures.push(signature.signature);
@@ -117,7 +118,7 @@ export default function TransactionsList({
       });
 
       // If the number of ordered signatures is not equal to the number of signers, throw an error
-      if (orderedSignatures.length != transaction.wallet.signer.length)
+      if (orderedSignatures.length != transaction.wallet.signers.length)
         throw new Error("Fewer signatures received than expected");
 
       // Get the initCode from the user operation
@@ -216,19 +217,19 @@ export default function TransactionsList({
                     <Icon type="check" />
                   </div>
                 ))}
-                {transaction.pendingSigners.map((signer) => (
-                  <div key={signer} className="flex font-mono gap-4">
-                    <span>{signer}</span>
+                {transaction.pendingSigners.map((signers) => (
+                  <div key={signers} className="flex font-mono gap-4">
+                    <span>{signers}</span>
                     <Icon type="xmark" />
                   </div>
                 ))}
 
-                {transaction.txhash ? (
+                {transaction.txHash ? (
                   <button
                     className="bg-blue-500 mx-auto hover:bg-blue-700 disabled:bg-blue-500/50 disabled:hover:bg-blue-500/50 hover:transition-colors text-white font-bold py-2 w-fit px-4 rounded-lg"
                     onClick={() =>
                       window.open(
-                        `https://goerli.etherscan.io/tx/${transaction.txhash}`,
+                        `https://sepolia.etherscan.io/tx/${transaction.txHash}`,
                         "_blank"
                       )
                     }

@@ -3,23 +3,23 @@
 import { prisma } from "@/utils/db";
 import { isAddress } from "ethers/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
-
+export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const address = searchParams.get("address");
+    const walletAddress = searchParams.get("WalletAddress");
 
-    if (!address) {
+    if (!walletAddress) {
       throw new Error("Missing or invalid address");
     }
-    if (!isAddress(address)) {
+    if (!isAddress(walletAddress)) {
       throw new Error("Invalid address");
     }
 
-    const wallet = await prisma.wallet.findMany({
+    const wallets = await prisma.wallet.findMany({
       where: {
-        signer: {
-          has: address.toLowerCase(),
+        signers: {
+          has: walletAddress.toLowerCase(),
         },
       },
       include: {
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         },
       },
     });
-    return NextResponse.json(wallet);
+    return NextResponse.json(wallets);
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error });

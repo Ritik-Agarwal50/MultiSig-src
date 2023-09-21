@@ -71,11 +71,6 @@ export default function CreateSCW() {
     }
   };
   return (
-    <main className="flex flex-col py-6 items-center gap-5">
-      <h1 className="text-5xl font-bold">Create New Wallet</h1>
-      <p className="text-gray-400">
-        Enter the signer addresses for this account
-      </p>
       <div className="flex flex-col gap-6 max-w-sm w-full">
         {signers.map((signer, index) => (
           <div key={signer} className="flex items-center gap-4">
@@ -128,6 +123,5 @@ export default function CreateSCW() {
           </div>
         )}
       </div>
-    </main>
   );
 }
