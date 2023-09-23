@@ -5,26 +5,36 @@ import { isAddress } from "ethers/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const walletAddress = searchParams.get("walletAddress");
+    const address = searchParams.get("address");
 
-    if (!walletAddress) {
+    if (!address) {
       throw new Error("Missing or invalid address");
     }
 
-    if (!isAddress(walletAddress)) {
+    if (!isAddress(address)) {
       throw new Error("Invalid Ethereum address");
     }
 
-    const wallet = await prisma.wallet.findFirst({
+    const wallets = await prisma.wallet.findMany({
       where: {
-        address: walletAddress,
+        signers: {
+          has: address.toLowerCase(),
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            transactions: true,
+          },
+        },
       },
     });
 
-    return NextResponse.json(wallet);
+    return NextResponse.json(wallets);
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error });

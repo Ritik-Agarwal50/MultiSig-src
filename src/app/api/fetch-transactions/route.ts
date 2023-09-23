@@ -8,6 +8,7 @@ import { Transaction, TransactionSignature, Wallet } from "@prisma/client";
 
 
 // Define a type for transactions with signatures
+export const dynamic = "force-dynamic";
 export type TransactionWithSignatures = Transaction & {
   signatures: TransactionSignature[];
   wallet: Wallet;

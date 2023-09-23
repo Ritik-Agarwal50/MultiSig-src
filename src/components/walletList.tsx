@@ -20,7 +20,7 @@ export default function WalletList({ address }: { address: string }) {
   return (
     <main className="flex flex-col justify-center items-center gap-5">
       <h1 className="text-5xl font-bold">Your Wallets</h1>
-      
+
       {wallets.length === 0 ? (
         <div className="flex justify-center items-center border-2 border-dashed p-6 rounded-lg">
           <p className="text-lg">

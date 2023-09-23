@@ -1,5 +1,5 @@
 /** @format */
-
+"use client";
 // Import necessary modules and hooks
 import { getUserOpForETHTransfer } from "@/utils/getUserOpForETHTransfer";
 import { parseEther } from "ethers/lib/utils";
