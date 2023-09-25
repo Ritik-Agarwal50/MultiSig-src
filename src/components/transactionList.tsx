@@ -96,19 +96,10 @@ export default function TransactionsList({
   // Define the sendTransaction function
   const sendTransaction = async (transaction: TransactionWithSignatures) => {
     try {
-      // Set loading to true to indicate the transaction sending process has started
       setLoading(true);
-
-      // Get the user operation from the transaction
       const userOp = transaction.userOp as unknown as IUserOperation;
-
-      // Initialize the bundler's client
       const client = await Client.init(BUNDLER_RPC_URL);
-
-      // Create an array to store the ordered signatures
       const orderedSignatures: string[] = [];
-
-      // Order the signatures based on the order of the signers
       transaction.wallet.signers.forEach((signer) => {
         transaction.signatures.forEach((signature) => {
           if (signature.signerAddress === signer) {
@@ -116,20 +107,13 @@ export default function TransactionsList({
           }
         });
       });
-
-      // If the number of ordered signatures is not equal to the number of signers, throw an error
       if (orderedSignatures.length != transaction.wallet.signers.length)
         throw new Error("Fewer signatures received than expected");
-
-      // Get the initCode from the user operation
       let initCode = userOp.initCode as Uint8Array;
 
-      // If the wallet is already deployed, set the initCode to an empty array
       if (transaction.wallet.isDeployed) {
         initCode = Uint8Array.from([]);
       }
-
-      // Get the user operation builder
       const builder = await getUserOperationBuilder(
         userOp.sender,
         BigNumber.from(userOp.nonce),
@@ -137,23 +121,18 @@ export default function TransactionsList({
         userOp.callData.toString(),
         orderedSignatures
       );
-
-      // Set the maxFeePerGas and maxPriorityFeePerGas in the builder
       builder
         .setMaxFeePerGas(userOp.maxFeePerGas)
         .setMaxPriorityFeePerGas(userOp.maxPriorityFeePerGas);
 
-      // Send the user operation and wait for the result
       const result = await client.sendUserOperation(builder);
+      
       const finalUserOpResult = await result.wait();
-
-      // Get the transaction receipt
+      
       const txHashReciept = await finalUserOpResult?.getTransactionReceipt();
 
-      // Get the transaction hash from the receipt
       const txHash = txHashReciept?.transactionHash;
 
-      // Mark the wallet as deployed by sending a POST request to the update-wallet-deployed endpoint
       await fetch("/api/update-wallet-deployed", {
         method: "POST",
         body: JSON.stringify({
@@ -170,6 +149,7 @@ export default function TransactionsList({
       window.location.reload();
     } catch (e) {
       // Log any errors that occur during the process
+      console.log(e);
       console.error(e);
 
       // If the error is an instance of Error, alert the user with the error message

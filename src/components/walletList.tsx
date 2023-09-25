@@ -3,9 +3,10 @@ import Icon from "./icon";
 import Link from "next/link";
 import { Wallet } from "@prisma/client";
 import { useEffect, useState } from "react";
+
 type WalletWithTxnsCount = Wallet & {
   _count: {
-    transaction: number;
+    transactions: number;
   };
 };
 
@@ -42,7 +43,7 @@ export default function WalletList({ address }: { address: string }) {
                   <div className="bg-gray-800 flex justify-between gap-4 items-center rounded-t-lg p-2 font-mono">
                     {wallet.address}
                     <p className="text-gray-300">
-                      Pending Txns: {wallet._count.transaction}
+                      Pending Txns: {wallet._count.transactions}
                     </p>
                     <div className="bg-gray-300 rounded-full items-center px-2 py-1 flex gap-2">
                       {wallet.isDeployed ? (

@@ -19,8 +19,8 @@ export async function getUserOperationBuilder(
     // Supply the builder with all the necessary details to create a userOp
     const builder = new UserOperationBuilder()
       .useDefaults({
-        preVerificationGas: 100_000,
-        callGasLimit: 100_000,
+        preVerificationGas: 200_000,
+        callGasLimit: 200_000,
         verificationGasLimit: 2_000_000,
       })
       .setSender(walletContract)
